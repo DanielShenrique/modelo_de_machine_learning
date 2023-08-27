@@ -6,14 +6,14 @@ TCC sobre nlp para classificação de mensagens e e-mails
 git clone https://github.com/DanielShenrique/modelo_de_machine_learning.git
 ```
 
-### Crie o ambiente virtual
-```
-python -m venv venv
-```
-
 ### Entre no diretório do projeto
 ```
 cd modelo_de_machine_learning
+```
+
+### Crie o ambiente virtual
+```
+python -m venv venv
 ```
 
 ### Ative o ambiente virtual
