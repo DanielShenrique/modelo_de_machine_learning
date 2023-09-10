@@ -29,6 +29,8 @@ def deletar(mensagem):
     bot.send_message(mensagem.chat.id , f"mensagem deletada: {mensagem.text}")
     bot.delete_message(mensagem.chat.id , mensagem.message_id)
 
-
+@bot.message_handler(func= lambda mensagem: True)
+def escutando(mensagem):
+    bot.send_message(mensagem.chat.id ,mensagem.text)
 
 bot.polling()
