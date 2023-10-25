@@ -8,6 +8,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from decouple import config
 
+from util.utils import pre_processamento
+
+import pickle
+
 CHAVE_API = config('API_BOT')
 
 bot = telebot.TeleBot(CHAVE_API)
@@ -18,6 +22,17 @@ textoPadrao = """
 Ola Seja bem-vindo
 O bot de processamento de (nlp) linguagem natural.
 você poderar verificar e ter uma maior certeza do que e fraude ou não da sua mensagem."""
+
+with open('modelo/modelo.pkl', 'rb') as arquivo:
+    modelo = pickle.load(arquivo)
+
+with open('modelo/vectorize.pkl', 'rb') as arquivo:
+    vectorize = pickle.load(arquivo)
+
+
+def transformar_mensagem(texto):
+    texto_transformado = pre_processamento(texto)
+    return texto_transformado
 
 @bot.message_handler(commands=["comandos","commands","c"])
 def status(mensagem: types.Message):
@@ -32,18 +47,30 @@ def boasVindas(mensagem: types.Message):
 
 @bot.message_handler(commands=["test"])
 def verificar(mensagem: types.Message):
-    vectorizer = TfidfVectorizer()
-    # mensagem_vetor = vectorizer.transform(mensagens)
-    # aplicação do modelo de machine learning
-    # resposta = model.predict(mensagem_vetor)
+    # # mensagem_vetor = vectorizer.transform(mensagens)
+    # # aplicação do modelo de machine learning
+    # # resposta = model.predict(mensagem_vetor)
 
-    nlp = spacy.load("en_core_web_md")
+    #TODO: trazer o método o vectorize
+    #TODO: trazer o método para transformar as frases
+    #TODO: utilizar o modelo para classificar
+    #TODO: testar amanhã
+
+    # nlp = spacy.load("en_core_web_md")
     for m in mensagens:
         frase = ""
-        doc = nlp(m.text)
-        for token in doc:
-            frase += f"Palavra: \"{token.text}\" Classe gramatical: {token.pos_}\n"
-        bot.send_message(mensagem.chat.id , frase)
+        # doc = nlp(m.text)
+        # for token in doc:
+        #     frase += f"Palavra: \"{token.text}\" Classe gramatical: {token.pos_}\n"
+        frase = transformar_mensagem(m.text)
+        frase_vectorizada = vectorize.transform([frase])
+
+        #TODO: alguma coisa está dando muito errada aqui
+        #TODO: ver depois
+        predicao = modelo.predict(frase_vectorizada)
+
+        bot.send_message(mensagem.chat.id, frase)
+        bot.send_message(mensagem.chat.id, predicao)
  
 
 
