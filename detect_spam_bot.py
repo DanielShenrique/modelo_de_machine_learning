@@ -1,10 +1,5 @@
 import telebot 
 from telebot import types
-from telebot.custom_filters import TextFilter
-import spacy
-import pandas as pd 
-
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from decouple import config
 
