@@ -16,8 +16,10 @@ CHAVE_API = config('API_BOT')
 
 bot = telebot.TeleBot(CHAVE_API)
 
-listaComandos = ["start","status","test","comandos",]
-mensagens = []
+listaComandos = ["start","status","comandos"]
+quantidade_fraude = 0
+quantidade_nao_fraude = 0
+quantidade_mensagens = 0
 textoPadrao = """
 Ola Seja bem-vindo
 O bot de processamento de (nlp) linguagem natural.
@@ -45,44 +47,35 @@ def status(mensagem: types.Message):
 def boasVindas(mensagem: types.Message):
     bot.reply_to(mensagem,textoPadrao)
 
-@bot.message_handler(commands=["test"])
-def verificar(mensagem: types.Message):
-    # # mensagem_vetor = vectorizer.transform(mensagens)
-    # # aplicação do modelo de machine learning
-    # # resposta = model.predict(mensagem_vetor)
-
-    #TODO: trazer o método o vectorize
-    #TODO: trazer o método para transformar as frases
-    #TODO: utilizar o modelo para classificar
-    #TODO: testar amanhã
-
-    # nlp = spacy.load("en_core_web_md")
-    for m in mensagens:
-        frase = ""
-        # doc = nlp(m.text)
-        # for token in doc:
-        #     frase += f"Palavra: \"{token.text}\" Classe gramatical: {token.pos_}\n"
-        frase = transformar_mensagem(m.text)
-        frase_vectorizada = vectorize.transform([frase])
-
-        #TODO: alguma coisa está dando muito errada aqui
-        #TODO: ver depois
-        predicao = modelo.predict(frase_vectorizada)
-
-        bot.send_message(mensagem.chat.id, frase)
-        bot.send_message(mensagem.chat.id, predicao)
- 
-
-
 @bot.message_handler(commands=["status"])
 def Status(mensagem: types.Message):
-    bot.send_message(mensagem.chat.id , f"Quantidade de mensagem lidas {len(mensagens)}")
-    for mensage in mensagens:
-        bot.send_message(mensagem.chat.id , f"O texto: {mensage.text}")
-    
+    resposta = f"Quantidade de fraude {quantidade_fraude}.\n"
+    resposta += f"Quantidade de mensagem não fraude {quantidade_nao_fraude}.\n"
+    resposta += f"Quantidade de mensagem lidas {quantidade_mensagens}.\n"
+    resposta += f"Quantidade de propoção de fraudes encontradas {(quantidade_fraude/quantidade_mensagens)*100:.1f}%.\n"
+    resposta += f"Quantidade de propoção de mensagens normais {(quantidade_nao_fraude/quantidade_mensagens)*100:.1f}%.\n"
+
+    bot.send_message(mensagem.chat.id, resposta)
 
 @bot.message_handler(func= lambda mensagem: True)
 def escutando(mensagem: types.Message):
-    mensagens.append(mensagem)
+    global quantidade_fraude, quantidade_nao_fraude, quantidade_mensagens
+
+    frase = transformar_mensagem(mensagem.text)
+    frase_vectorizada = vectorize.transform([frase])
+    predicao = modelo.predict(frase_vectorizada)
+
+    if(predicao > -1):
+        if(predicao == 0):
+            bot.reply_to(mensagem, "Essa frase é um Spam.")
+        else:
+            if(predicao == 1):
+                bot.reply_to(mensagem, "Essa frase é um Smishing.")
+        quantidade_fraude += 1
+    else:
+        quantidade_nao_fraude += 1
+
+    quantidade_mensagens += 1
+
 
 bot.polling()
