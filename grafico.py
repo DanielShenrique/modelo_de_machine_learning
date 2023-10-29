@@ -12,3 +12,7 @@ df.drop(["URL", "EMAIL", "PHONE"], axis=1, inplace=True)
 df.drop_duplicates(inplace=True)
 
 df.reset_index(drop=True, inplace=True)
+
+grafico = sns.histplot(data= df, x="LABEL")
+
+plt.savefig("img/grafico_barra_label")
