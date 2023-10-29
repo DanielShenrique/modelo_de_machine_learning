@@ -61,11 +61,7 @@ def escutando(mensagem: types.Message):
     predicao = modelo.predict(frase_vectorizada)
 
     if(predicao > -1):
-        if(predicao == 0):
-            bot.reply_to(mensagem, "Essa frase é um Spam.")
-        else:
-            if(predicao == 1):
-                bot.reply_to(mensagem, "Essa frase é um Smishing.")
+        bot.reply_to(mensagem, "Essa mensagem é um possivel ameaça!!!")
         quantidade_fraude += 1
     else:
         quantidade_nao_fraude += 1
