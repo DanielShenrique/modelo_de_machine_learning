@@ -2,17 +2,18 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv(filepath_or_buffer="data/Dataset_5971.csv", sep=",")
+df = pd.read_csv(filepath_or_buffer="data/tabela_tratada.csv", sep=",")
 
-df["LABEL"].replace("Spam", "spam", inplace=True)
-df["LABEL"].replace("Smishing", "smishing", inplace=True)
+df["LABEL"].replace( -1 , "Ham", inplace=True)
+df["LABEL"].replace( 0 , "Spam", inplace=True)
+df["LABEL"].replace( 1 , "Smishing", inplace=True)
 
-df.drop(["URL", "EMAIL", "PHONE"], axis=1, inplace=True)
+sns.set_theme(style="darkgrid")
+sns.set_palette("Paired")
 
-df.drop_duplicates(inplace=True)
+grafico = sns.countplot(data= df, x="LABEL")
 
-df.reset_index(drop=True, inplace=True)
-
-grafico = sns.histplot(data= df, x="LABEL")
+plt.xlabel("Classes")
+plt.ylabel("Quantidade")
 
 plt.savefig("img/grafico_barra_label")
