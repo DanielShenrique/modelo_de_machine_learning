@@ -64,6 +64,11 @@ venv\Scripts\activate
 python -m pip install -r requirements.txt
 ```
 
+6. Baixe a linguagem para o modelo
+
+```powershell
+python -m spacy download en_core_web_trf
+```
 </div>
 
 <div id="tecnologias-utilizadas">
