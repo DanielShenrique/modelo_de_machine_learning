@@ -45,15 +45,18 @@ def boasVindas(mensagem: types.Message):
 
 @bot.message_handler(commands=["status"])
 def Status(mensagem: types.Message):
-    porcentagem_faude = fp.formato_porcentagem(quantidade_fraude/quantidade_mensagens)
-    porcentagem_nao_faude = fp.formato_porcentagem(quantidade_nao_fraude/quantidade_mensagens)    
-    resposta = f"Quantidade de fraude {quantidade_fraude}.\n"
-    resposta += f"Quantidade de mensagem não fraude {quantidade_nao_fraude}.\n"
-    resposta += f"Quantidade de mensagem lidas {quantidade_mensagens}.\n"
-    resposta += f"Quantidade de propoção de fraudes encontradas {porcentagem_faude}.\n"
-    resposta += f"Quantidade de propoção de mensagens normais {porcentagem_nao_faude}.\n"
+    if(quantidade_mensagens):
+        porcentagem_faude = fp.formato_porcentagem(quantidade_fraude/quantidade_mensagens)
+        porcentagem_nao_faude = fp.formato_porcentagem(quantidade_nao_fraude/quantidade_mensagens)    
+        resposta = f"Quantidade de fraude {quantidade_fraude}.\n"
+        resposta += f"Quantidade de mensagem não fraude {quantidade_nao_fraude}.\n"
+        resposta += f"Quantidade de mensagem lidas {quantidade_mensagens}.\n"
+        resposta += f"Quantidade de propoção de fraudes encontradas {porcentagem_faude}.\n"
+        resposta += f"Quantidade de propoção de mensagens normais {porcentagem_nao_faude}.\n"
+        bot.send_message(mensagem.chat.id, resposta)
+    else:
+        bot.send_message(mensagem.chat.id, "Nenhuma mensagem lida até o momento.")
 
-    bot.send_message(mensagem.chat.id, resposta)
 
 @bot.message_handler(func= lambda mensagem: True)
 def escutando(mensagem: types.Message):
