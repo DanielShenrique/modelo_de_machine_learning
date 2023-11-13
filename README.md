@@ -69,6 +69,18 @@ python -m pip install -r requirements.txt
 ```powershell
 python -m spacy download en_core_web_trf
 ```
+
+
+7. Crie um arquivo .env para o projeto
+
+```powershell
+API_BOT="CHAVE_DO_BOT"
+```
+
+8. Chame o bot para um grupo em adicionar com a tag
+```powershell
+@adm_mensagem_Bot
+```
 </div>
 
 <div id="tecnologias-utilizadas">
