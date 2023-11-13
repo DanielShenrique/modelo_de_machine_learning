@@ -70,7 +70,6 @@ python -m pip install -r requirements.txt
 python -m spacy download en_core_web_trf
 ```
 
-
 7. Crie um arquivo .env para o projeto
 
 ```powershell
@@ -81,6 +80,12 @@ API_BOT="CHAVE_DO_BOT"
 ```powershell
 @adm_mensagem_Bot
 ```
+
+9. Rode o projeto
+```powershell
+python -m detect_spam_bot
+```
+
 </div>
 
 <div id="tecnologias-utilizadas">
